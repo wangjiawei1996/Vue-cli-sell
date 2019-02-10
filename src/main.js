@@ -11,7 +11,6 @@ import './common/stylus/index.styl'
 
 Vue.use(VueRouter)
 Vue.use(VueResource)
-
 Vue.config.productionTip = false
 
 var routes = [
