@@ -22,7 +22,11 @@
         <img class="icon-xiayiye" src='./next.png' />
       </div>
     </div>
-    <div class="bulletin-wrapper"></div>
+    <div class="bulletin-wrapper">
+      <span class="bulletin-title"></span>
+      <span class="bulletin-text">{{seller.bulletin}}</span>
+      <img class="icon-xiayiye" src='./next.png' />
+    </div>
   </div>
 </template>
 
@@ -114,5 +118,32 @@ export default {
           height: 12px
           margin-left: 2px
           padding: 6px 0
-
+    .bulletin-wrapper
+      position: relative
+      height: 28px
+      line-height: 28px
+      padding: 0 22px 0 12px
+      white-space: nowrap
+      overflow: hidden
+      text-overflow: ellipsis
+      background: rgba(7, 17, 27, 0.2)
+      .bulletin-title
+        display: inline-block
+        vertical-align: top
+        margin-top: 7px
+        width: 22px
+        height: 12px
+        bg-image('bulletin')
+        background-size: 22px 12px
+        background-repeat: no-repeat
+      .bulletin-text
+        vertical-align: top
+        margin: 0 4px 0 0
+        font-size: 10px
+      .icon-xiayiye
+        position: absolute
+        width: 12px
+        height: 12px
+        right: 8px
+        top: 8px
 </style>
