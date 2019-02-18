@@ -30,7 +30,14 @@
     <div class="background">
       <img :src="seller.avatar" width="100%" height="100%" />
     </div>
-    <div v-show="detailShow" class="detail"></div>
+    <div v-show="detailShow" class="detail">
+      <div class="detail-wrapper claerfix">
+        <div class="detail-main"></div>
+      </div>
+      <div class="detail-close">
+        <img class="icon-close" src='./close.png' />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -179,5 +186,18 @@ export default {
       top: 0
       overflow: auto
       background: rgba(7, 17, 27, 0.8)
-
+      .detail-wrapper
+        min-height: 100%
+        .detail-main
+          margin-top: 64px
+          padding-bottom: 64px
+      .detail-close
+        position: relative
+        margin: -64px auto 0 auto
+        text-align: center
+        clear: both
+        .icon-close
+          width: 32px
+          height: 32px
+          font-size: 32px
 </style>
