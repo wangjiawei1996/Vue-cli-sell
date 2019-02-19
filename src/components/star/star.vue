@@ -5,7 +5,7 @@
 </template>
 
 <script>
-const LENGTH = 5 
+const LENGTH = 5
 const CLS_ON = 'on'
 const CLS_HALF = 'half'
 const CLS_OFF = 'off'
