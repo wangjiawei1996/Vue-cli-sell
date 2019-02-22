@@ -12,18 +12,21 @@
         <router-link to="/seller">商家</router-link>
       </div>
     </div>
+    <goods :goods="goods"></goods>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
 import header from './components/header/header.vue'
+import goods from './components/goods/goods.vue'
 
 const ERR_OK = 0
 export default {
   data() {
     return {
-      seller: {}
+      seller: {},
+      goods: {}
     }
   },
   created() {
@@ -37,12 +40,14 @@ export default {
     })
   },
   components: {
-    'v-header': header
+    'v-header': header,
+    'goods': goods
   }
 }
 </script>
 
 <style lang="stylus">
+  @import '~common/stylus/minin'
   .tab
     display: flex
     width: 100%
