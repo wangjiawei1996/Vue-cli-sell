@@ -150,7 +150,7 @@ export default {
             .now
               margin-right: 8px
               font-size: 14px
-              color: rgb(240, 20 ,20) 
+              color: rgb(240, 20 ,20)
             .old
               text-decoration: line-through
               font-size: 10px
