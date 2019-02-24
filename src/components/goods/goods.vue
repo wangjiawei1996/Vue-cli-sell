@@ -1,6 +1,6 @@
 <template>
   <div class="goods">
-    <div class="menu-wrapper">
+    <div class="menu-wrapper" ref="wrapper">
       <ul>
         <li v-for="(item, index) in goods" :key="index" class="menu-item">
           <span class="text border-1px">
@@ -9,7 +9,7 @@
         </li>
       </ul>
     </div>
-    <div class="foods-wrapper">
+    <div class="foods-wrapper" ref="wrapper">
       <ul>
         <li v-for="(item, index) in goods" class="food-list" :key="index">
           <h1 class="title">{{item.name}}</h1>
@@ -39,6 +39,7 @@
 </template>
 
 <script>
+  import BScroll from 'better-scroll'
 const ERR_OK = 0
 export default {
   name: 'goods',
@@ -60,6 +61,9 @@ export default {
         this.goods = response.data
       }
     })
+  },
+  mounted () {
+    this.scroll = new BScroll(this.$refs.wrapper)
   }
 }
 </script>
