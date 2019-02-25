@@ -2,7 +2,7 @@
   <div class="goods">
     <div class="menu-wrapper" ref="menuwrapper">
       <ul>
-        <li v-for="(item, index) in goods" :key="index" class="menu-item">
+        <li v-for="(item, index) in goods" :key="index" class="menu-item" @click="selectFood">
           <span class="text border-1px">
             <span v-show="item.type>0" class="icon" :class="classMap[item.type]"></span>{{item.name}}
           </span>
@@ -46,6 +46,11 @@ export default {
   props: {
     seller: {
       type: Object
+    }
+  },
+  methods: {
+    selectFood (e) {
+      console.log(e.target.innerText)
     }
   },
   data() {
