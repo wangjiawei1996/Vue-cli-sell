@@ -12,7 +12,6 @@
         <router-link to="/seller">商家</router-link>
       </div>
     </div>
-    <goods :goods="goods"></goods>
     <router-view></router-view>
   </div>
 </template>

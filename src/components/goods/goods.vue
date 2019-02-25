@@ -1,6 +1,6 @@
 <template>
   <div class="goods">
-    <div class="menu-wrapper" ref="wrapper">
+    <div class="menu-wrapper" ref="menuwrapper">
       <ul>
         <li v-for="(item, index) in goods" :key="index" class="menu-item">
           <span class="text border-1px">
@@ -9,7 +9,7 @@
         </li>
       </ul>
     </div>
-    <div class="foods-wrapper" ref="wrapper">
+    <div class="foods-wrapper" ref="foodswrapper">
       <ul>
         <li v-for="(item, index) in goods" class="food-list" :key="index">
           <h1 class="title">{{item.name}}</h1>
@@ -22,8 +22,7 @@
                 <h2 class="name">{{food.name}}</h2>
                 <p class="desc">{{food.description}}</p>
                 <div class="extra">
-                  <span class="count">月售{{food.sellCount}}</span>
-                  <span>好评率{{food.rating}}%</span>
+                  <span class="count">月售{{food.sellCount}}</span><span>好评率{{food.rating}}%</span>
                 </div>
                 <div class="price">
                   <span class="now">¥{{food.price}}</span>
@@ -40,6 +39,7 @@
 
 <script>
   import BScroll from 'better-scroll'
+
 const ERR_OK = 0
 export default {
   name: 'goods',
@@ -63,7 +63,8 @@ export default {
     })
   },
   mounted () {
-    this.scroll = new BScroll(this.$refs.wrapper)
+    this.scroll = new BScroll(this.$refs.menuwrapper)
+    this.scroll = new BScroll(this.$refs.foodswrapper)
   }
 }
 </script>
@@ -144,9 +145,10 @@ export default {
             font-size: 10px
             color: rgb(147, 153, 159)
           .desc
+            line-height: 12px
             margin-bottom: 8px
           .extra
-            &.count
+            .count
               margin-right: 12px
           .price
             font-weight: 700
