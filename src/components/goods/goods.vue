@@ -6,7 +6,7 @@
           v-for="(item, index) in goods"
           :key="index"
           class="menu-item"
-          @click="handleSelectFood"
+          :class="{'current':currentIndex===index}"
         >
           <span class="text border-1px">
             <span v-show="item.type>0" class="icon" :class="classMap[item.type]"></span>{{item.name}}
@@ -55,7 +55,7 @@ export default {
   },
   methods: {
     _calculateHeight() {
-      let foodList = this.$els.foodswrapper.getElementsByClassName('food-list-hock')
+      let foodList = this.$refs.foodswrapper.getElementsByClassName('food-list-hock')
       let height = 0
       this.listHeight.push(height)
       for (let i = 0; i < foodList.length; i++) {
@@ -77,7 +77,7 @@ export default {
       for (let i = 0; i < this.listHeight.length; i++) {
         let heigth1 = this.listHeight[i]
         let height2 = this.listHeight[i + 1]
-        if (!height2 || (this.scrollY > heigth1 && this.scrollY < height2)) {
+        if (!height2 || (this.scrollY >= heigth1 && this.scrollY < height2)) {
           return i
         }
       }
@@ -126,6 +126,14 @@ export default {
         width: 56px
         padding: 0 12px
         line-height: 14px
+        &.current
+          position: relative
+          z-index: 10
+          margin-top: -1px
+          background: #fff
+          font-weight: 700
+          .text
+            border-none()
         .icon
           display: inline-block
           vertical-align: top
