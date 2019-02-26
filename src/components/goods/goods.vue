@@ -2,7 +2,12 @@
   <div class="goods">
     <div class="menu-wrapper" ref="menuwrapper">
       <ul>
-        <li v-for="(item, index) in goods" :key="index" class="menu-item" @click="selectFood">
+        <li
+          v-for="(item, index) in goods"
+          :key="index"
+          class="menu-item"
+          @click="handleSelectFood"
+        >
           <span class="text border-1px">
             <span v-show="item.type>0" class="icon" :class="classMap[item.type]"></span>{{item.name}}
           </span>
@@ -11,7 +16,7 @@
     </div>
     <div class="foods-wrapper" ref="foodswrapper">
       <ul>
-        <li v-for="(item, index) in goods" class="food-list" :key="index">
+        <li v-for="(item, index) in goods" class="food-list food-list-hook" :key="index">
           <h1 class="title">{{item.name}}</h1>
           <ul>
             <li v-for="(food, index) in item.foods" class="food-item border-1px" :key="index">
@@ -49,13 +54,34 @@ export default {
     }
   },
   methods: {
-    selectFood (e) {
-      console.log(e.target.innerText)
+    _calculateHeight() {
+      let foodList = this.$els.foodswrapper.getElementsByClassName('food-list-hock')
+      let height = 0
+      this.listHeight.push(height)
+      for (let i = 0; i < foodList.length; i++) {
+        let item = foodList[i]
+        height += item.clientHeight
+        this.listHeight.push(height)
+      }
     }
   },
   data() {
     return {
-      goods: []
+      goods: [],
+      listHeight: [],
+      scrollY: 0
+    }
+  },
+  computed: {
+    currentIndex() {
+      for (let i = 0; i < this.listHeight.length; i++) {
+        let heigth1 = this.listHeight[i]
+        let height2 = this.listHeight[i + 1]
+        if (!height2 || (this.scrollY > heigth1 && this.scrollY < height2)) {
+          return i
+        }
+      }
+      return 0
     }
   },
   created() {
@@ -64,12 +90,20 @@ export default {
       response = response.body
       if (response.errno === ERR_OK) {
         this.goods = response.data
+        this.$nextTick(() => {
+          this._calculateHeight()
+        })
       }
     })
   },
   mounted () {
     this.scroll = new BScroll(this.$refs.menuwrapper)
-    this.scroll = new BScroll(this.$refs.foodswrapper)
+    this.scroll = new BScroll(this.$refs.foodswrapper, {
+      probeType: 3
+    })
+    this.scroll.on('scroll', (pos) => {
+      this.scrollY = Math.abs(Math.round(pos.y))
+    })
   }
 }
 </script>
