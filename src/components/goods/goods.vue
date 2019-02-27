@@ -16,7 +16,7 @@
     </div>
     <div class="foods-wrapper" ref="foodswrapper">
       <ul>
-        <li v-for="(item, index) in goods" class="food-list food-list-hook" :key="index">
+        <li v-for="(item, index) in goods" class="food-list" :key="index" ref="foodList">
           <h1 class="title">{{item.name}}</h1>
           <ul>
             <li v-for="(food, index) in item.foods" class="food-item border-1px" :key="index">
@@ -44,7 +44,6 @@
 
 <script>
   import BScroll from 'better-scroll'
-
 const ERR_OK = 0
 export default {
   name: 'goods',
@@ -55,7 +54,7 @@ export default {
   },
   methods: {
     _calculateHeight() {
-      let foodList = this.$refs.foodswrapper.getElementsByClassName('food-list-hock')
+      let foodList = this.$refs.foodList
       let height = 0
       this.listHeight.push(height)
       for (let i = 0; i < foodList.length; i++) {
