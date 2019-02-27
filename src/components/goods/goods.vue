@@ -40,11 +40,13 @@
         </li>
       </ul>
     </div>
+    <shopcart></shopcart>
   </div>
 </template>
 
 <script>
   import BScroll from 'better-scroll'
+  import shopcart from 'components/shopcart/shopcart'
 const ERR_OK = 0
 export default {
   name: 'goods',
@@ -114,6 +116,9 @@ export default {
     this.foodsScroll.on('scroll', (pos) => {
       this.scrollY = Math.abs(Math.round(pos.y))
     })
+  },
+  components: {
+    shopcart
   }
 }
 </script>
