@@ -7,6 +7,7 @@
           :key="index"
           class="menu-item"
           :class="{'current':currentIndex===index}"
+          @click="selectMenu(index,$event)"
         >
           <span class="text border-1px">
             <span v-show="item.type>0" class="icon" :class="classMap[item.type]"></span>{{item.name}}
@@ -53,6 +54,14 @@ export default {
     }
   },
   methods: {
+    selectMenu(index, event) {
+      if (!event._constructed) {
+        return
+      }
+      let foodList = this.$refs.foodList
+      let el = foodList[index]
+      this.foodsScroll.scrollToElement(el, 300)
+    },
     _calculateHeight() {
       let foodList = this.$refs.foodList
       let height = 0
@@ -96,11 +105,13 @@ export default {
     })
   },
   mounted () {
-    this.scroll = new BScroll(this.$refs.menuwrapper)
-    this.scroll = new BScroll(this.$refs.foodswrapper, {
+    this.meunScroll = new BScroll(this.$refs.menuwrapper, {
+      click: true
+    })
+    this.foodsScroll = new BScroll(this.$refs.foodswrapper, {
       probeType: 3
     })
-    this.scroll.on('scroll', (pos) => {
+    this.foodsScroll.on('scroll', (pos) => {
       this.scrollY = Math.abs(Math.round(pos.y))
     })
   }
