@@ -7,8 +7,8 @@
             <img class="icon-shopping_cart" src="./shopcart.png" />
           </div>
         </div>
-        <div class="price"></div>
-        <div class="desc"></div>
+        <div class="price">¥0</div>
+        <div class="desc">另需配送费￥{{deliveryPrice}}元</div>
       </div>
       <div class="content-right"></div>
     </div>
@@ -16,7 +16,19 @@
 </template>
 
 <script>
-export default {}
+export default {
+  name: 'shopcart',
+  props: {
+    deliveryPrice: {
+      type: Number,
+      default: 0
+    },
+    minPrice: {
+      type: Number,
+      default: 0
+    }
+  }
+}
 </script>
 
 <style lang="stylus" scoped>
@@ -69,8 +81,14 @@ export default {}
           border-right: 1px solid rgba(255, 255, 255, 0.1)
           font-size: 16px
           font-weight: 700
+          color: rgba(255, 255, 255, 0.4)
         .desc
           display: inline-block
+          vertical-align: top
+          margin: 12px 0 0 12px
+          line-height: 24px
+          color: rgba(255, 255, 255, 0.4)
+          font-size: 10px
       .content-right
         flex: 0 0 105px
         width: 105px
