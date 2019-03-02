@@ -115,6 +115,7 @@ export default {
       click: true
     })
     this.foodsScroll = new BScroll(this.$refs.foodswrapper, {
+      click: true,
       probeType: 3
     })
     this.foodsScroll.on('scroll', (pos) => {

@@ -1,6 +1,6 @@
 <template>
   <div class="cartcontrol">
-    <div class="cart-decrease" v-show="food.count>0">
+    <div class="cart-decrease" v-show="food.count>0" @click="decreaseCart">
       <img class="cartcontrol-decrease" src="./decrease.png" />
     </div>
     <div class="cart-count" v-show="food.count>0">{{food.count}}</div>
@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import Vue from 'vue'
 export default {
   name: 'cartcontrol',
   props: {
@@ -18,8 +19,25 @@ export default {
       type: Object
     }
   },
-  created() {
-    console.log(this.food)
+  methods: {
+    addCart(event) {
+      if (!event._constructed) {
+        return
+      }
+      if (!this.food.count) {
+        Vue.set(this.food, 'count', 1)
+      } else {
+        this.food.count++
+      }
+    },
+    decreaseCart(event) {
+      if (!event._constructed) {
+        return
+      }
+      if (this.food.count) {
+        this.food.count--
+      }
+    }
   }
 }
 </script>
@@ -37,6 +55,13 @@ export default {
         line-height: 24px
     .cart-count
       display: inline-block
+      vertical-align: top
+      width: 12px
+      padding-top: 6px
+      line-height: 24px
+      text-align: center
+      font-size: 10px
+      color: rgb(147, 153, 159)
     .cart-add
       display: inline-block
       padding: 6px
