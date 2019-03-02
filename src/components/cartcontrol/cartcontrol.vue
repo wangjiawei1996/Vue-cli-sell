@@ -1,8 +1,12 @@
 <template>
   <div class="cartcontrol">
-    <div class="cart-decrease" v-show="food.count>0" @click="decreaseCart">
-      <img class="cartcontrol-decrease" src="./decrease.png" />
-    </div>
+    <transition name="move">
+      <div class="cart-decrease" v-show="food.count>0" @click="decreaseCart">
+        <span class="inner">
+          <img class="cartcontrol-decrease" src="./decrease.png" />
+        </span>
+      </div>
+    </transition>
     <div class="cart-count" v-show="food.count>0">{{food.count}}</div>
     <div class="cart-add" @click="addCart">
       <img class="cartcontrol-add" src="./add.png" />
@@ -47,12 +51,27 @@ export default {
   .cartcontrol
     font-size: 0
     .cart-decrease
+      transition:all 0.4s linear
       display: inline-block
       padding: 6px
-      .cartcontrol-decrease
-        width: 24px
-        height: 24px
-        line-height: 24px
+      transition: all 0.4s linear
+      .inner
+        display: inline-block
+        transition: all 0.4s linear
+        transform: rotate(0)
+      &.move-enter-active, &.move-leave-active
+        opacity: 1
+        transform: translate3d(0, 0, 0)
+      &.move-enter, &.move-leave-active
+        opacity: 0
+        transform: translate3d(24px, 0, 0)
+        .inner
+          transform: rotate(180deg)
+      .inner
+        .cartcontrol-decrease
+          width: 24px
+          height: 24px
+          line-height: 24px
     .cart-count
       display: inline-block
       vertical-align: top
