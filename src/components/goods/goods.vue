@@ -43,7 +43,7 @@
         </li>
       </ul>
     </div>
-    <shopcart :select-foods="selectFoods" :delivery-price="seller.deliveryPrice" :minPprice="seller.minPrice"></shopcart>
+    <shopcart ref="shopcart" :select-foods="selectFoods" :delivery-price="seller.deliveryPrice" :minPprice="seller.minPrice"></shopcart>
   </div>
 </template>
 
@@ -68,8 +68,10 @@ export default {
       let el = foodList[index]
       this.foodsScroll.scrollToElement(el, 300)
     },
-    _drop() {
-
+    _drop(target) {
+      this.$nextTick(() => {
+        this.$refs.shopcart.drop(target)
+      })
     },
     _calculateHeight() {
       let foodList = this.$refs.foodList
