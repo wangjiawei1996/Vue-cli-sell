@@ -68,6 +68,9 @@ export default {
       let el = foodList[index]
       this.foodsScroll.scrollToElement(el, 300)
     },
+    _drop() {
+
+    },
     _calculateHeight() {
       let foodList = this.$refs.foodList
       let height = 0
@@ -136,6 +139,11 @@ export default {
   components: {
     shopcart,
     cartcontrol
+  },
+  events: {
+    'cart.add'(target) {
+      this.drop(target)
+    }
   }
 }
 </script>
