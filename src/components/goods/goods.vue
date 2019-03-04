@@ -35,7 +35,7 @@
                   <span class="old" v-show="food.oldPrice">¥{{food.oldPrice}}</span>
                 </div>
                 <div class="cartcontrol-wrapper">
-                  <cartcontrol :food="food"></cartcontrol>
+                  <cartcontrol @add="addFood" :food="food"></cartcontrol>
                 </div>
               </div>
             </li>
@@ -67,6 +67,16 @@ export default {
       let foodList = this.$refs.foodList
       let el = foodList[index]
       this.foodsScroll.scrollToElement(el, 300)
+    },
+    selectFood(food, event) {
+      if (!event._constructed) {
+        return
+      }
+      this.selectedFood = food
+      this.$refs.food.show()
+    },
+    addFood(target) {
+      this._drop(target)
     },
     _drop(target) {
       this.$nextTick(() => {
@@ -141,11 +151,6 @@ export default {
   components: {
     shopcart,
     cartcontrol
-  },
-  events: {
-    'cart.add'(target) {
-      this.drop(target)
-    }
   }
 }
 </script>
