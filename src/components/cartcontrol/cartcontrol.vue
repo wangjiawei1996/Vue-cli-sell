@@ -1,14 +1,14 @@
 <template>
   <div class="cartcontrol">
     <transition name="move">
-      <div class="cart-decrease" v-show="food.count>0" @click="decreaseCart">
+      <div class="cart-decrease" v-show="food.count>0" @click="decrease">
         <span class="inner">
           <img class="cartcontrol-decrease" src="./decrease.png" />
         </span>
       </div>
     </transition>
     <div class="cart-count" v-show="food.count>0">{{food.count}}</div>
-    <div class="cart-add" @click="addCart">
+    <div class="cart-add" @click="add">
       <img class="cartcontrol-add" src="./add.png" />
     </div>
   </div>
@@ -24,10 +24,7 @@ export default {
     }
   },
   methods: {
-    addCart(event) {
-      if (!event._constructed) {
-        return
-      }
+    add(event) {
       if (!this.food.count) {
         Vue.set(this.food, 'count', 1)
       } else {
@@ -35,10 +32,7 @@ export default {
       }
       this.$emit('add', event.target)
     },
-    decreaseCart(event) {
-      if (!event._constructed) {
-        return
-      }
+    decrease(event) {
       if (this.food.count) {
         this.food.count--
       }

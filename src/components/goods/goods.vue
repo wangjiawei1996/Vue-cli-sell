@@ -35,7 +35,7 @@
                   <span class="old" v-show="food.oldPrice">¥{{food.oldPrice}}</span>
                 </div>
                 <div class="cartcontrol-wrapper">
-                  <cartcontrol @add="addFood" :food="food"></cartcontrol>
+                  <cartcontrol @add="onAdd" :food="food"></cartcontrol>
                 </div>
               </div>
             </li>
@@ -75,13 +75,8 @@ export default {
       this.selectedFood = food
       this.$refs.food.show()
     },
-    addFood(target) {
-      this._drop(target)
-    },
-    _drop(target) {
-      this.$nextTick(() => {
-        this.$refs.shopcart.drop(target)
-      })
+    onAdd(target) {
+      this.$refs.shopcart.drop(target)
     },
     _calculateHeight() {
       let foodList = this.$refs.foodList
