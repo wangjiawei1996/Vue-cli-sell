@@ -1,6 +1,6 @@
 <template>
   <div class="shopcart">
-    <div class="content">
+    <div class="content" @click="toggleList">
       <div class="content-left">
         <div class="logo-wrapper">
           <div class="logo" :class="{'highlight':totalCount>0}">
@@ -82,7 +82,8 @@ export default {
   },
   data() {
     return {
-      balls: createBalls()
+      balls: createBalls(),
+      fold: true
     }
   },
   created() {
@@ -119,6 +120,15 @@ export default {
       } else {
         return 'enough'
       }
+    },
+    listShow() {
+      if (!this.totalCount) {
+        return false
+      }
+      if (this.totalCount > 0 && !this.collapsed) {
+        return true
+      }
+      return false
     }
   },
   methods: {
@@ -132,6 +142,12 @@ export default {
           return
         }
       }
+    },
+    toggleList() {
+      if (!this.totalCount) {
+        return
+      }
+      this.fold = !this.fold
     },
     beforeDrop(el) {
       const ball = this.dropBalls[this.dropBalls.length - 1]
