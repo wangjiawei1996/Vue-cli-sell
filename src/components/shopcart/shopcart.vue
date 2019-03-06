@@ -26,7 +26,7 @@
         </transition>
       </div>
     </div>
-    <div class="shopcart-list" v-show="listShow">
+    <div class="shopcart-list" v-show="visible">
       <div class="list-header">
         <h1 class="title">购物车</h1>
         <span class="empty">清空</span>
@@ -49,6 +49,7 @@
 </template>
 
 <script>
+import popupMixin from 'common/mixins/popup'
 import cartcontrol from 'components/cartcontrol/cartcontrol'
 const BALL_LEN = 10
 const innerClsHook = 'inner-hook'
@@ -61,6 +62,7 @@ function createBalls() {
 }
 export default {
   name: 'shopcart',
+  mixins: [popupMixin],
   props: {
     selectFoods: {
       type: Array,
@@ -78,12 +80,16 @@ export default {
     minPrice: {
       type: Number,
       default: 20
+    },
+    fold: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
     return {
       balls: createBalls(),
-      fold: true
+      listFold: this.fold
     }
   },
   created() {
@@ -120,15 +126,6 @@ export default {
       } else {
         return 'enough'
       }
-    },
-    listShow() {
-      if (!this.totalCount) {
-        return false
-      }
-      if (this.totalCount > 0 && !this.collapsed) {
-        return true
-      }
-      return false
     }
   },
   methods: {
@@ -144,10 +141,17 @@ export default {
       }
     },
     toggleList() {
-      if (!this.totalCount) {
-        return
+      if (this.listFold) {
+        if (!this.totalCount) {
+          return
+        }
+        this.listFold = false
+        this._showShopCartList()
+        this._showShopCartSticky()
+      } else {
+        this.listFold = true
+        this._hideShopCartList()
       }
-      this.fold = !this.fold
     },
     beforeDrop(el) {
       const ball = this.dropBalls[this.dropBalls.length - 1]
@@ -171,6 +175,52 @@ export default {
       if (ball) {
         ball.show = false
         el.style.display = 'none'
+      }
+    },
+    _showShopCartList() {
+      this.shopCartListComp = this.$createShopCartList({
+        $props: {
+          selectFoods: 'selectFoods'
+        },
+        $events: {
+          leave: () => {
+            this._hideShopCartSticky()
+          },
+          hide: () => {
+            this.listFold = true
+          },
+          add: (el) => {
+            this.shopCartStickyComp.drop(el)
+          }
+        }
+      })
+      this.shopCartListComp.show()
+    },
+    _showShopCartSticky() {
+      this.shopCartStickyComp = this.$createShopCartSticky({
+        $props: {
+          selectFoods: 'selectFoods',
+          deliveryPrice: 'deliveryPrice',
+          minPrice: 'minPrice',
+          fold: this.listFold,
+          sticky: true,
+          list: this.shopCartListComp
+        }
+      })
+      this.shopCartStickyComp.show()
+    },
+    _hideShopCartList() {
+      const list = this.sticky ? this.$parent.list : this.shopCartListComp
+      list.hide && list.hide()
+    },
+    _hideShopCartSticky() {
+      this.shopCartStickyComp.hide()
+    }
+  },
+  watch: {
+    totalCount(count) {
+      if (!this.fold && count === 0) {
+        this._hideShopCartList()
       }
     }
   },
