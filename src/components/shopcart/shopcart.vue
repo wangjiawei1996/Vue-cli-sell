@@ -1,8 +1,8 @@
 <template>
   <div class="shopcart">
-    <div class="content" @click="toggleList">
+    <div class="content">
       <div class="content-left">
-        <div class="logo-wrapper">
+        <div class="logo-wrapper" @click="changeFold">
           <div class="logo" :class="{'highlight':totalCount>0}">
             <img class="icon-shopping_cart" :class="{'highlight':totalCount>0}" src="./shopcart.png" />
           </div>
@@ -26,12 +26,12 @@
         </transition>
       </div>
     </div>
-    <div class="shopcart-list" v-show="visible">
+    <div class="shopcart-list" v-show="Fold">
       <div class="list-header">
         <h1 class="title">购物车</h1>
         <span class="empty">清空</span>
       </div>
-      <div class="list-content">
+      <div class="list-content" ref="listWrapper">
         <ul>
           <li class="food" v-for="(food, index) in selectFoods" :key="index">
             <span class="name">{{food.name}}</span>
@@ -39,7 +39,7 @@
               <span>￥{{food.price*food.count}}</span>
             </div>
             <div class="cartcontrol-wrapper">
-              <cartcontrol :food="food"></cartcontrol>
+              <cartcontrol :food="food" @decrease="changeShow"></cartcontrol>
             </div>
           </li>
         </ul>
@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import popupMixin from 'common/mixins/popup'
+import BScroll from 'better-scroll'
 import cartcontrol from 'components/cartcontrol/cartcontrol'
 const BALL_LEN = 10
 const innerClsHook = 'inner-hook'
@@ -62,7 +62,6 @@ function createBalls() {
 }
 export default {
   name: 'shopcart',
-  mixins: [popupMixin],
   props: {
     selectFoods: {
       type: Array,
@@ -89,7 +88,7 @@ export default {
   data() {
     return {
       balls: createBalls(),
-      listFold: this.fold
+      Fold: false
     }
   },
   created() {
@@ -126,6 +125,12 @@ export default {
       } else {
         return 'enough'
       }
+    },
+    showFold () {
+      if (this.totalCount > 0) {
+        return true
+      }
+      return false
     }
   },
   methods: {
@@ -140,17 +145,26 @@ export default {
         }
       }
     },
-    toggleList() {
-      if (this.listFold) {
-        if (!this.totalCount) {
-          return
+    changeShow () {
+      if (this.totalCount === 0) {
+        this.Fold = !this.Fold
+      }
+    },
+    _initScroll () {
+      this.listScroll = new BScroll(this.$refs.listWrapper, {
+        click: true
+      })
+    },
+    changeFold () {
+      if (this.showFold) {
+        this.Fold = !this.Fold
+        if (!this.listScroll) {
+          this.$nextTick(() => {
+            this._initScroll()
+          })
+        } else {
+          this.listScroll.refresh()
         }
-        this.listFold = false
-        this._showShopCartList()
-        this._showShopCartSticky()
-      } else {
-        this.listFold = true
-        this._hideShopCartList()
       }
     },
     beforeDrop(el) {
@@ -195,26 +209,6 @@ export default {
         }
       })
       this.shopCartListComp.show()
-    },
-    _showShopCartSticky() {
-      this.shopCartStickyComp = this.$createShopCartSticky({
-        $props: {
-          selectFoods: 'selectFoods',
-          deliveryPrice: 'deliveryPrice',
-          minPrice: 'minPrice',
-          fold: this.listFold,
-          sticky: true,
-          list: this.shopCartListComp
-        }
-      })
-      this.shopCartStickyComp.show()
-    },
-    _hideShopCartList() {
-      const list = this.sticky ? this.$parent.list : this.shopCartListComp
-      list.hide && list.hide()
-    },
-    _hideShopCartSticky() {
-      this.shopCartStickyComp.hide()
     }
   },
   watch: {
