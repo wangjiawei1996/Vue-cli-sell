@@ -177,6 +177,7 @@ export default {
       this.selectFoods.forEach((food) => {
         food.count = 0
       })
+      this.Fold = false
     },
     pay() {
       if (this.totalPrice < this.minPrice) {
