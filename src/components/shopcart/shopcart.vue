@@ -1,51 +1,56 @@
 <template>
-  <div class="shopcart">
-    <div class="content" @click="changeFold">
-      <div class="content-left">
-        <div class="logo-wrapper">
-          <div class="logo" :class="{'highlight':totalCount>0}">
-            <img class="icon-shopping_cart" :class="{'highlight':totalCount>0}" src="./shopcart.png" />
+  <div>
+    <div class="shopcart">
+      <div class="content">
+        <div class="content-left" @click="changeFold">
+          <div class="logo-wrapper">
+            <div class="logo" :class="{'highlight':totalCount>0}">
+              <img class="icon-shopping_cart" :class="{'highlight':totalCount>0}" src="./shopcart.png" />
+            </div>
+            <div class="num" v-show="totalCount>0">{{totalCount}}</div>
           </div>
-          <div class="num" v-show="totalCount>0">{{totalCount}}</div>
+          <div class="price" :class="{'highlight':totalPrice>0}">￥{{totalPrice}}</div>
+          <div class="desc">另需配送费￥{{deliveryPrice}}元</div>
         </div>
-        <div class="price" :class="{'highlight':totalPrice>0}">￥{{totalPrice}}</div>
-        <div class="desc">另需配送费￥{{deliveryPrice}}元</div>
-      </div>
-      <div class="content-right">
-        <div class="pay" :class="payClass">
-          {{payDesc}}
-        </div>
-      </div>
-    </div>
-    <div class="ball-container">
-      <div v-for="(ball, index) in balls" :key="index">
-        <transition @before-enter="beforeDrop" @enter="dropping" @after-enter="afterDrop">
-          <div class="ball" v-show="ball.show">
-            <div class="inner inner-hook"></div>
+        <div class="content-right" @click.stop.prevent="pay">
+          <div class="pay" :class="payClass">
+            {{payDesc}}
           </div>
-        </transition>
+        </div>
       </div>
+      <div class="ball-container">
+        <div v-for="(ball, index) in balls" :key="index">
+          <transition @before-enter="beforeDrop" @enter="dropping" @after-enter="afterDrop">
+            <div class="ball" v-show="ball.show">
+              <div class="inner inner-hook"></div>
+            </div>
+          </transition>
+        </div>
+      </div>
+      <transition name="fold">
+        <div class="shopcart-list" v-show="Fold">
+          <div class="list-header">
+            <h1 class="title">购物车</h1>
+            <span class="empty" @click="empty">清空</span>
+          </div>
+          <div class="list-content" ref="listWrapper">
+            <ul>
+              <li class="food" v-for="(food, index) in selectFoods" :key="index">
+                <span class="name">{{food.name}}</span>
+                <div class="price">
+                  <span>￥{{food.price*food.count}}</span>
+                </div>
+                <div class="cartcontrol-wrapper">
+                  <cartcontrol :food="food" @decrease="changeShow"></cartcontrol>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </transition>
     </div>
-    <transition name="fold">
-      <div class="shopcart-list" v-show="Fold">
-        <div class="list-header">
-          <h1 class="title">购物车</h1>
-          <span class="empty">清空</span>
-        </div>
-        <div class="list-content" ref="listWrapper">
-          <ul>
-            <li class="food" v-for="(food, index) in selectFoods" :key="index">
-              <span class="name">{{food.name}}</span>
-              <div class="price">
-                <span>￥{{food.price*food.count}}</span>
-              </div>
-              <div class="cartcontrol-wrapper">
-                <cartcontrol :food="food" @decrease="changeShow"></cartcontrol>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </div>
+    <transition name="fade">
+        <div class="list-mask" v-show="Fold" @click="changeFold"></div>
     </transition>
   </div>
 </template>
@@ -75,8 +80,7 @@ export default {
       }
     },
     deliveryPrice: {
-      type: Number,
-      default: 0
+      type: Number
     },
     minPrice: {
       type: Number,
@@ -168,6 +172,17 @@ export default {
           this.listScroll.refresh()
         }
       }
+    },
+    empty() {
+      this.selectFoods.forEach((food) => {
+        food.count = 0
+      })
+    },
+    pay() {
+      if (this.totalPrice < this.minPrice) {
+        return
+      }
+      window.alert(`需要支付${this.totalPrice}元`)
     },
     beforeDrop(el) {
       const ball = this.dropBalls[this.dropBalls.length - 1]
@@ -361,4 +376,18 @@ export default {
             position: absolute
             right: 0
             bottom: 6px
+  .list-mask
+    position: fixed
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    z-index: 40
+    backdrop-filter: blur(10px)
+    background-color rgba(7, 17, 27, 0.6)
+    transition all .3s
+    opacity: 1
+    &.blur-enter ,&.blur-leave-to
+      opacity 0
+      background-color rgba(7, 17, 27, 0)
 </style>
