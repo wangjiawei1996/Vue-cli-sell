@@ -18,14 +18,12 @@
 
 <script>
 import header from './components/header/header.vue'
-import goods from './components/goods/goods.vue'
 
 const ERR_OK = 0
 export default {
   data() {
     return {
-      seller: {},
-      goods: {}
+      seller: {}
     }
   },
   created() {
@@ -39,8 +37,7 @@ export default {
     })
   },
   components: {
-    'v-header': header,
-    'goods': goods
+    'v-header': header
   }
 }
 </script>
