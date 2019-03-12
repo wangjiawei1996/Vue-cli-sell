@@ -9,7 +9,7 @@
           </div>
         </div>
         <div class="content">
-          <h1 class="content">{{food.name}}</h1>
+          <h1 class="title">{{food.name}}</h1>
           <div class="detail">
             <span class="sell-count">月售{{food.sellCount}}份</span>
             <span class="rating">好评率{{food.rating}}%</span>
@@ -18,11 +18,11 @@
             <span class="now">¥{{food.price}}</span>
              <span class="old" v-show="food.oldPrice">¥{{food.oldPrice}}</span>
           </div>
+          <div class="cartcontrol-wrapper">
+            <cartcontrol :food="food"></cartcontrol>
+          </div>
+          <div @click="addFirst" class="buy" v-show="!food.count || food.count === 0">加入购物车</div>
         </div>
-        <div class="cartcontrol-wrapper">
-          <cartcontrol :food="food"></cartcontrol>
-        </div>
-        <div class="buy"></div>
       </div>
     </div>
   </transition>
@@ -57,6 +57,10 @@ export default {
     },
     hide() {
       this.showFlag = false
+    },
+    addFirst(event) {
+      this.$set(this.food, 'count', 1)
+      this.$emit('add', event.target)
     }
   },
   components: {
@@ -101,6 +105,7 @@ export default {
             width: 20px
             height: 20px
       .content
+        position: relative
         padding: 18px
         .title
           line-height: 14px
@@ -129,4 +134,23 @@ export default {
             text-decoration: line-through
             font-size: 10px
             color: rgb(147, 153, 159)
+        .cartcontrol-wrapper
+          position: absolute
+          display: inline-block
+          right: 12px
+          bottom: 12px
+        .buy
+          position: absolute
+          display: inline-block
+          right: 18px
+          bottom: 18px
+          z-index: 10
+          height: 24px
+          line-height: 24px
+          padding: 0 12px
+          box-sizing: border-box
+          border-radius: 12px
+          font-size: 10px
+          color: #fff
+          background: rgb(0, 160, 220)
 </style>
