@@ -19,9 +19,11 @@
              <span class="old" v-show="food.oldPrice">¥{{food.oldPrice}}</span>
           </div>
           <div class="cartcontrol-wrapper">
-            <cartcontrol :food="food"></cartcontrol>
+            <cartcontrol :food="food" @add="onAdd"></cartcontrol>
           </div>
-          <div @click="addFirst" class="buy" v-show="!food.count || food.count === 0">加入购物车</div>
+          <transition name="fade">
+            <div @click.stop.prevent="addFirst" class="buy" v-show="!food.count || food.count === 0">加入购物车</div>
+          </transition>
         </div>
       </div>
     </div>
@@ -60,6 +62,9 @@ export default {
     },
     addFirst(event) {
       this.$set(this.food, 'count', 1)
+      this.$emit('add', event.target)
+    },
+    onAdd(target) {
       this.$emit('add', event.target)
     }
   },
@@ -153,4 +158,10 @@ export default {
           font-size: 10px
           color: #fff
           background: rgb(0, 160, 220)
+          opacity: 1
+          &.fade-enter-active, &.fade-leave-active
+            transition: all 0.3s
+          &.fade-enter, &.fade-leave-active
+            opacity: 0
+            z-index: -1
 </style>
