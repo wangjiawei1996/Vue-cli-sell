@@ -1,12 +1,14 @@
 <template>
   <div class="ratingselect">
-    <div class="rating-type">
+    <div class="rating-type border-1px">
       <span>{{desc.all}}</span>
       <span>{{desc.positive}}</span>
       <span>{{desc.negative}}</span>
     </div>
     <div class="switch">
-      <span></span>
+      <span>
+        <img src="./select.png" />
+      </span>
       <span class="text">只看有内容的评价</span>
     </div>
   </div>
@@ -47,5 +49,10 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-
+  @import '~common/stylus/minin'
+  .ratingselect
+    .rating-type
+      padding: 18px 0
+      margin: 0 18px
+      border-1px(rgba(7, 17, 27, 0.1))
 </style>
