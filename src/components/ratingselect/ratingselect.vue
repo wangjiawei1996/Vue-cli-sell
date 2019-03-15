@@ -1,11 +1,11 @@
 <template>
   <div class="ratingselect">
     <div class="rating-type border-1px">
-      <span class="block positive" :class="{'active':selectType===2}">{{desc.all}}<span class="count">47</span></span>
-      <span class="block positive" :class="{'active':selectType===0}">{{desc.positive}}<span class="count">40</span></span>
-      <span class="block negative" :class="{'active':selectType===1}">{{desc.negative}}<span class="count">7</span></span>
+      <span @click="select(2,$event)" class="block positive" :class="{'active':selectType===2}">{{desc.all}}<span class="count">{{ratings.length}}</span></span>
+      <span @click="select(0,$event)" class="block positive" :class="{'active':selectType===0}">{{desc.positive}}<span class="count">40</span></span>
+      <span @click="select(1,$event)" class="block negative" :class="{'active':selectType===1}">{{desc.negative}}<span class="count">7</span></span>
     </div>
-    <div class="switch">
+    <div class="switch" @click="Only">
       <span>
         <img src="./select.png" class="icon-check_circle" />
       </span>
@@ -20,7 +20,7 @@
   const ALL = 2
 export default {
   props: {
-    rating: {
+    ratings: {
       type: Array,
       default() {
         return []
@@ -43,6 +43,20 @@ export default {
           negative: '不满意'
         }
       }
+    }
+  },
+  methods: {
+    select(type, event) {
+      if (!event._constructed) {
+        return
+      }
+      this.$emit('select', type)
+    },
+    Only(event) {
+      if (!event._constructed) {
+        return
+      }
+      this.$emit('only')
     }
   }
 }

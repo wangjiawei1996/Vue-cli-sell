@@ -33,7 +33,7 @@
         <split></split>
         <div class="rating">
           <h1 class="title">商品评价</h1>
-          <ratingselect :select-type="selectType" :only-content="onlyContent" :desc="desc" :ratings="food.ratings"></ratingselect>
+          <ratingselect :select-type="selectType" :only-content="onlyContent" :desc="desc" :ratings="food.ratings" @select="selected" @only="only"></ratingselect>
         </div>
       </div>
     </div>
@@ -67,6 +67,12 @@ export default {
     }
   },
   methods: {
+    selected (type) {
+      this.selectType = type
+    },
+    only () {
+      this.onlyContent = !this.onlyContent
+    },
     show() {
       this.showFlag = true
       this.selectType = ALL
