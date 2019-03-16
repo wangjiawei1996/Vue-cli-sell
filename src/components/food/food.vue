@@ -36,14 +36,17 @@
           <ratingselect :select-type="selectType" :only-content="onlyContent" :desc="desc" :ratings="food.ratings" @select="selected" @only="only"></ratingselect>
           <div class="rating-wrapper">
             <ul v-show="food.ratings && food.ratings.length">
-              <li v-for="rating in food.ratings" class="rating-item" :key="rating.index">
+              <li v-for="rating in food.ratings" class="rating-item border-1px" :key="rating.index">
                 <div class="user">
                   <span class="name">{{rating.username}}}</span>
                   <img class="avatar" width="12" height="12" :src="rating.avatar" />
                 </div>
                 <div class="time">{{rating.rateTime}}</div>
                 <p class="text">
-                  <span :class="{'icon-thumb_up' : rating.rateType === 0, 'icon-thumb_down' : rating.rateType === 1}"></span>{{rating.text}}
+                  <span>
+                    <img src="./thumbup.png" v-show="rating.rateType === 0" class="thumbup" />
+                    <img src="./thumbdown.png" v-show="rating.rateType === 1" class="thumbup" />
+                  </span>{{rating.text}}
                 </p>
               </li>
             </ul>
@@ -230,4 +233,38 @@ export default {
           margin-left: 18px
           font-size: 14px
           color: rgb(7, 17, 27)
+        .rating-wrapper
+          padding: 0 18px
+          .rating-item
+            position: relative
+            padding: 16px 0
+            border-1px(rgba(7, 17, 27, 0.1))
+            .user
+              position: absolute
+              right: 0
+              top: 16px
+              line-height: 12px
+              font-size: 0
+              .name
+                display: inline-block
+                margin-right: 6px
+                vertical-align: top
+                font-size: 10px
+                color: rgb(147, 153, 159)
+              .avatar
+                border-radius: 50%
+            .time
+              margin-bottom: 6px
+              line-height: 12px
+              font-size: 10px
+              color: rgb(147, 153, 159)
+            .text
+              line-height: 16px
+              font-size: 12px
+              color: rgb(7 ,17, 27)
+              .thumbup, .thumbdown
+                margin-right: 4px
+                line-height: 24px
+                width: 12px
+                height: 12px
 </style>
