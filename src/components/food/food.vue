@@ -36,7 +36,7 @@
           <ratingselect :select-type="selectType" :only-content="onlyContent" :desc="desc" :ratings="food.ratings" @select="selected" @only="only"></ratingselect>
           <div class="rating-wrapper">
             <ul v-show="food.ratings && food.ratings.length">
-              <li v-for="rating in food.ratings" class="rating-item border-1px" :key="rating.index">
+              <li v-show="needShow(rating.rateType, rating.text)" v-for="rating in food.ratings" class="rating-item border-1px" :key="rating.index">
                 <div class="user">
                   <span class="name">{{rating.username}}}</span>
                   <img class="avatar" width="12" height="12" :src="rating.avatar" />
@@ -114,6 +114,30 @@ export default {
     },
     onAdd(target) {
       this.$emit('add', event.target)
+    },
+    needShow(type, text) {
+      if (this.onlyContent && !text) {
+        return false
+      }
+      if (this.selectType === ALL) {
+        return true
+      } else {
+        return type === this.selectType
+      }
+    }
+  },
+  events: {
+    'ratingtype.select'(type) {
+      this.selectType = type
+      this.$nextTick(() => {
+        this.scroll.refresh()
+      })
+    },
+    'content.toggle'(onlyContent) {
+      this.onlyContent = onlyContent
+      this.$nextTick(() => {
+        this.scroll.refresh()
+      })
     }
   },
   components: {
@@ -264,7 +288,7 @@ export default {
               color: rgb(7 ,17, 27)
               .thumbup, .thumbdown
                 margin-right: 4px
-                line-height: 24px
-                width: 12px
-                height: 12px
+                line-height: 16px
+                width: 14px
+                height: 14px
 </style>
