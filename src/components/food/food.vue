@@ -60,7 +60,7 @@
 
 <script>
 import BSroll from 'better-scroll'
-import {formatDate} from 'common/js/date.js'
+import { formatDate } from '../../common/js/date.js'
 import cartcontrol from '../cartcontrol/cartcontrol'
 import ratingselect from '../ratingselect/ratingselect'
 import split from '../split/split'
@@ -142,7 +142,7 @@ export default {
     }
   },
   filters: {
-    formatDate(time) {
+    formatTime (time) {
       let date = new Date(time)
       return formatDate(date, 'yyyy-MM-dd hh:mm')
     }
