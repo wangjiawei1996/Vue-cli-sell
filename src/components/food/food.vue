@@ -41,7 +41,7 @@
                   <span class="name">{{rating.username}}}</span>
                   <img class="avatar" width="12" height="12" :src="rating.avatar" />
                 </div>
-                <div class="time">{{rating.rateTime}}</div>
+                <div class="time">{{rating.rateTime | formatTime}}</div>
                 <p class="text">
                   <span>
                     <img src="./thumbup.png" v-show="rating.rateType === 0" class="thumbup" />
@@ -50,7 +50,7 @@
                 </p>
               </li>
             </ul>
-            <div class="no-rating" v-show="!food.ratings || !food.ratings.length"></div>
+            <div class="no-rating" v-show="!food.ratings || !food.ratings.length">暂无评价 </div>
           </div>
         </div>
       </div>
@@ -60,6 +60,7 @@
 
 <script>
 import BSroll from 'better-scroll'
+import {formatDate} from 'common/js/date.js'
 import cartcontrol from '../cartcontrol/cartcontrol'
 import ratingselect from '../ratingselect/ratingselect'
 import split from '../split/split'
@@ -138,6 +139,12 @@ export default {
       this.$nextTick(() => {
         this.scroll.refresh()
       })
+    }
+  },
+  filters: {
+    formatDate(time) {
+      let date = new Date(time)
+      return formatDate(date, 'yyyy-MM-dd hh:mm')
     }
   },
   components: {
@@ -291,4 +298,8 @@ export default {
                 line-height: 16px
                 width: 14px
                 height: 14px
+      .no-rating
+        padding: 16px 0
+        font-size: 12px
+        color: rgb(147, 153, 159)
 </style>
