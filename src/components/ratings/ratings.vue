@@ -25,10 +25,10 @@
         </div>
       </div>
       <split></split>
-      <ratingselect :select-type="selectType" :only-content="onlyContent" :desc="desc" :ratings="ratings"></ratingselect>
+      <ratingselect :select-type="selectType" :only-content="onlyContent" :desc="desc" :ratings="ratings" @select="selected" @only="only"></ratingselect>
       <div class="rating-wrapper">
         <ul>
-          <li class="rating-item" v-for="rating in ratings" :key="rating.index">
+          <li class="rating-item" v-for="rating in ratings" :key="rating.index" v-show="needShow(rating.rateType, rating.text)">
             <div class="avatar">
               <img width="28" height="28" :src="rating.avatar" />
             </div>
@@ -44,7 +44,7 @@
                   <img width="14" height="14" src="./thumbup.png" v-show="rating.rateType === 0" class="thumbup" />
                   <img width="14" height="14" src="./thumbdown.png" v-show="rating.rateType === 1" class="thumbup" />
                 </span>
-                <span v-for="item in rating.recommend" :key="item.index">{{item}}</span>
+                <span class="item" v-for="item in rating.recommend" :key="item.index">{{item}}</span>
               </div>
               <div class="time">{{rating.rateTime | formatTime}}</div>
             </div>
@@ -93,6 +93,38 @@ export default {
         })
       }
     })
+  },
+  methods: {
+    needShow(type, text) {
+      if (this.onlyContent && !text) {
+        return false
+      }
+      if (this.selectType === ALL) {
+        return true
+      } else {
+        return type === this.selectType
+      }
+    },
+    selected (type) {
+      this.selectType = type
+    },
+    only () {
+      this.onlyContent = !this.onlyContent
+    }
+  },
+  events: {
+    'ratingtype.select'(type) {
+      this.selectType = type
+      this.$nextTick(() => {
+        this.scroll.refresh()
+      })
+    },
+    'content.toggle'(onlyContent) {
+      this.onlyContent = onlyContent
+      this.$nextTick(() => {
+        this.scroll.refresh()
+      })
+    }
   },
   filters: {
     formatTime (time) {
@@ -205,4 +237,29 @@ export default {
              line-height: 12px
              font-size: 10px
              color: rgb(147, 153, 159)
+         .text
+           margin-bottom: 8px
+           line-height: 18px
+           color: rgb(7, 17, 27)
+           font-size: 12px
+         .recommend
+           line-height: 16px
+           font-size: 0
+           .thumbup, .item
+             display: inline-block
+             margin: 0 8px 4px 0
+             font-size: 9px
+           .item
+             padding: 0 6px
+             border: 1px solid rgba(7, 17, 27, 0.1)
+             border-radius: 1px
+             color: rgb(147, 153, 159)
+             background: #fff
+         .time
+           position: absolute
+           top: 0
+           right: 0
+           line-height: 12px
+           font-size: 10px
+           color: rgb(147, 153, 159)
 </style>
