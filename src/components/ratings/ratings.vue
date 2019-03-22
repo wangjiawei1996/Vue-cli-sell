@@ -1,5 +1,5 @@
 <template>
-  <div class="ratings">
+  <div class="ratings" ref="ratings">
     <div class="ratings-content">
       <div class="overview">
         <div class="overview-left">
@@ -30,7 +30,7 @@
         <ul>
           <li class="rating-item" v-for="rating in ratings" :key="rating.index">
             <div class="avatar">
-              <img :src="rating.avatar" />
+              <img width="28" height="28" :src="rating.avatar" />
             </div>
             <div class="content">
               <h1 class="name">{{rating.username}}</h1>
@@ -41,11 +41,12 @@
               <p class="text">{{rating.text}}</p>
               <div class="recommend" v-show="rating.recommend && rating.recommend.length">
                 <span>
-                  <img src="./thumbup.png" v-show="rating.rateType === 0" class="thumbup" />
-                  <img src="./thumbdown.png" v-show="rating.rateType === 1" class="thumbup" />
+                  <img width="14" height="14" src="./thumbup.png" v-show="rating.rateType === 0" class="thumbup" />
+                  <img width="14" height="14" src="./thumbdown.png" v-show="rating.rateType === 1" class="thumbup" />
                 </span>
                 <span v-for="item in rating.recommend" :key="item.index">{{item}}</span>
               </div>
+              <div class="time">{{rating.rateTime | formatTime}}</div>
             </div>
           </li>
         </ul>
@@ -55,8 +56,10 @@
 </template>
 
 <script>
+import BScroll from 'better-scroll'
 import star from '../star/star'
 import ratingselect from '../ratingselect/ratingselect'
+import { formatDate } from '../../common/js/date.js'
 import split from '../split/split'
 const ERR_NO = 0
 const ALL = 2
@@ -83,8 +86,19 @@ export default {
       response = response.body
       if (response.errno === ERR_NO) {
         this.ratings = response.data
+        this.$nextTick(() => {
+          this.scroll = new BScroll(this.$refs.ratings, {
+            click: true
+          })
+        })
       }
     })
+  },
+  filters: {
+    formatTime (time) {
+      let date = new Date(time)
+      return formatDate(date, 'yyyy-MM-dd hh:mm')
+    }
   },
   components: {
     star,
@@ -158,4 +172,37 @@ export default {
            margin-left: 12px
            font-size: 12px
            color: rgb(147, 153, 159)
+   .rating-wrapper
+     padding: 0 18px
+     .rating-item
+       display: flex
+       padding: 18px 0
+       border-1px(rgba(7, 17, 27, 0.1))
+       .avatar
+         flex: 0 0 28px
+         width: 28px
+         margin-right: 12px
+         img
+           border-radius: 50%
+       .content
+         position: relative
+         flex: 1
+         .name
+           margin-bottom: 4px
+           line-height: 12px
+           font-size: 10px
+           color: rgb(7, 17, 27)
+         .star-wrapper
+           margin-bottom: 6px
+           font-size: 0
+           .star
+             display: inline-block
+             margin-right: 6px
+             vertical-align: top
+           .delivery
+             display: inline-block
+             vertical-align: top
+             line-height: 12px
+             font-size: 10px
+             color: rgb(147, 153, 159)
 </style>
