@@ -10,12 +10,12 @@
         <div class="overview-right">
           <div class="score-wrapper">
             <span class="title">服务态度</span>
-            <star :size="24" :score="seller.serviceScore"></star>
+            <star :size="36" :score="seller.serviceScore"></star>
             <span class="score">{{seller.serviceScore}}</span>
           </div>
           <div class="score-wrapper">
             <span class="title">商品评分</span>
-            <star :size="24" :score="seller.serviceScore"></star>
+            <star :size="36" :score="seller.serviceScore"></star>
             <span class="score">{{seller.foodScore}}</span>
           </div>
           <div class="delivery-wrapper">
@@ -24,20 +24,72 @@
           </div>
         </div>
       </div>
+      <split></split>
+      <ratingselect :select-type="selectType" :only-content="onlyContent" :desc="desc" :ratings="ratings"></ratingselect>
+      <div class="rating-wrapper">
+        <ul>
+          <li class="rating-item" v-for="rating in ratings" :key="rating.index">
+            <div class="avatar">
+              <img :src="rating.avatar" />
+            </div>
+            <div class="content">
+              <h1 class="name">{{rating.username}}</h1>
+              <div class="star-wrapper">
+                <star :size="24" :score="rating.score"></star>
+                <span class="delivery" v-show="rating.deliveryTime">{{rating.deliveryTime}}</span>
+              </div>
+              <p class="text">{{rating.text}}</p>
+              <div class="recommend" v-show="rating.recommend && rating.recommend.length">
+                <span>
+                  <img src="./thumbup.png" v-show="rating.rateType === 0" class="thumbup" />
+                  <img src="./thumbdown.png" v-show="rating.rateType === 1" class="thumbup" />
+                </span>
+                <span v-for="item in rating.recommend" :key="item.index">{{item}}</span>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import star from '../star/star'
+import ratingselect from '../ratingselect/ratingselect'
+import split from '../split/split'
+const ERR_NO = 0
+const ALL = 2
 export default {
   props: {
     seller: {
       type: Object
     }
   },
+  data() {
+    return {
+      ratings: [],
+      selectType: ALL,
+      onlyContent: true,
+      desc: {
+        all: '全部',
+        positive: '推荐',
+        negative: '吐槽'
+      }
+    }
+  },
+  created() {
+    this.$http.get('/api/ratings').then(response => {
+      response = response.body
+      if (response.errno === ERR_NO) {
+        this.ratings = response.data
+      }
+    })
+  },
   components: {
-    star
+    star,
+    ratingselect,
+    split
   }
 }
 </script>
