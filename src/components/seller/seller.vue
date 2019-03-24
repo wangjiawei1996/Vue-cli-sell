@@ -58,10 +58,10 @@ export default {
   },
   created() {
     this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee']
-  },
-  ready() {
-    this.scroll = new BScroll(this.refs.seller, {
-      click: true
+    this.$nextTick(() => {
+      this.scroll = new BScroll(this.$refs.seller, {
+        click: true
+      })
     })
   },
   components: {
@@ -141,6 +141,8 @@ export default {
           padding: 16px 12px
           border-1px(rgba(7, 17, 27, 0.1))
           font-size: 0
+          &:last-child
+            border-none()
         .icon
           display: inline-block
           width: 16px
