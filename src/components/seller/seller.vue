@@ -82,7 +82,7 @@ export default {
   },
   data() {
     return {
-      favorite: false
+      favorite: true
     }
   },
   computed: {
@@ -98,7 +98,10 @@ export default {
     })
   },
   methods: {
-    toggleFavorite() {
+    toggleFavorite(event) {
+      if (!event._constructed) {
+        return
+      }
       this.favorite = !this.favorite
     },
     _initPics () {
@@ -113,6 +116,8 @@ export default {
               scrollX: true,
               eventPassthrough: 'vertical'
             })
+          } else {
+            this.picScroll.refresh()
           }
         })
       }
@@ -181,7 +186,7 @@ export default {
         position: absolute
         width: 50px
         top: 18px
-        right: 5px
+        right: 11px
         text-align: center
         .icon-favorite
           display: block
