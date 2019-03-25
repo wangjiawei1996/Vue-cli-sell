@@ -28,6 +28,12 @@
             </div>
           </li>
         </ul>
+        <div class="favorite" @click="toggleFavorite">
+          <span class="icon-favorite" :class="{'active':favorite}">
+            <img src="./favorite.png" width="24px" height="24px">
+          </span>
+          <span class="text">{{favoriteText}}</span>
+        </div>
       </div>
       <split></split>
       <div class="bulletin">
@@ -74,6 +80,16 @@ export default {
       type: Object
     }
   },
+  data() {
+    return {
+      favorite: false
+    }
+  },
+  computed: {
+    favoriteText() {
+      return this.favorite ? '已收藏' : '收藏'
+    }
+  },
   created() {
     this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee']
     this.$nextTick(() => {
@@ -82,6 +98,9 @@ export default {
     })
   },
   methods: {
+    toggleFavorite() {
+      this.favorite = !this.favorite
+    },
     _initPics () {
       if (this.seller.pics) {
         let picWidth = 120
@@ -116,6 +135,7 @@ export default {
     width: 100%
     overflow: hidden
     .overview
+      position: relative
       padding: 18px
       .title
         margin-bottom: 8px
@@ -157,6 +177,20 @@ export default {
             color: rgb(7, 17, 27)
             .stress
               font-size: 24px
+      .favorite
+        position: absolute
+        width: 50px
+        top: 18px
+        right: 5px
+        text-align: center
+        .icon-favorite
+          display: block
+          margin-bottom: 4px
+          line-height: 24px
+        .text
+          line-height: 10px
+          font-size: 10px
+          color: rgb(77, 85, 93)
     .bulletin
       padding: 18px 18px 0 18px
       .title
